@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registration Form</title>
+  <style>
+    #registration-form {
+      text-align: center;
+    }
+
+    .green-button {
+      background-color: green;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    #saved-data {
+      margin-top: 50px;
+    }
+
+    #saved-data table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    #saved-data th, #saved-data td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: left;
+    }
+
+    #saved-data th {
+      background-color: #ccc;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Registration Form</h1>
+  <form id="registration-form">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    <br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+    <br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br><br>
+
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" required>
+    <br><br>
+
+    <input type="checkbox" id="terms" class="hidden" required>
+
+    <button type="submit" class="green-button">Submit</button>
+  </form>
+
+  <div id="saved-data">
+    <h2>Saved Data</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Password</th>
+          <th>Date of Birth</th>
+        </tr>
+      </thead>
+      <tbody id="saved-data-body">
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Load saved data from web storage
+    const savedData = JSON.parse(localStorage.getItem('registrationData'));
+    if (savedData) {
+      document.getElementById('name').value = savedData.name;
+      document.getElementById('email').value = savedData.email;
+      document.getElementById('password').value = savedData.password;
+      document.getElementById('dob').value = savedData.dob;
+    }
+
+    // Add event listener for form submission
+    const form = document.getElementById('registration-form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      // Get form data
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const dob = document.getElementById('dob').value;
+
+      // Validate date of birth
+      const dobDate = new Date(dob);
+      const dobYear = dobDate.getFullYear();
+      const now = new Date();
+      const age = now.getFullYear() - dobYear;
+
+      if (age < 18 || age > 55) {
+        alert('You must be between 18 and 55 years old to register.');
+        return;
+      }
+
+      // Save form data to web storage
+      const formData = {
+        name,
+        email,
+        password,
+        dob,
+      };
+      localStorage.setItem('registrationData', JSON.stringify(formData));
+
+     
+
+
+      // Display form data
+      alert(`Name: ${name}\nEmail: ${email}\nPassword: ${password}\nDate of Birth: ${dob}\nAccepted Terms: ${terms}`);
+    });
+  </script>
+</body>
+</html>
